@@ -1,2 +1,3 @@
-# relatorio
-Projeto de relatório automatizado usando rmarkdown
+# Relatório em R
+
+Projeto de relatório em R, para o workshop do DGI/SAGI.
