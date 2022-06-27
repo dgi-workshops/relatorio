@@ -1,4 +1,3 @@
-# Relatório em R
+# Relatorio 
 
-Projeto de relatório em R, para o workshop do DGI/SAGI.
-
+Projeto de relatório em R para o workshop do DGI/SAGI.
