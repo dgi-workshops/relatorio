@@ -1,24 +1,24 @@
 ---
-title: "Projeto de relatório"
+title: "Relatório"
 author: "DGI/SAGI"
-date: "6/27/2022"
+date: "6/28/2022"
 output: html_document
 ---
 
-## Apresentação dos Dados
+# Descrição
 
-Utilizaremos os dados referentes ao programa **Bolsa Família**.
+Proposta de relatório automatizado usando R, com base nos dados do **Bolsa Família**.
 
+# Conjuto de dados
 
 ```{r}
+
 municipios = read.csv("dados/municipios.csv")
-```
 
-```{r}
+
 url = "http://aplicacoes.mds.gov.br/sagi/servicos/misocial?fq=tipo_s:mes_mu&wt=csv&q=*&fl=ibge:codigo_ibge,anomes:anomes_s,qtd_familias_beneficiarias_bolsa_familia,valor_repassado_bolsa_familia&rows=10000000&sort=anomes_s%20asc,%20codigo_ibge%20asc"
 
 bolsa_familia = read.csv(url)
+
 ```
-
-
 
