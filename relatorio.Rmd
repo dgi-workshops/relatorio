@@ -22,3 +22,9 @@ bolsa_familia = read.csv(url)
 
 ```
 
+```{r}
+
+# exemplo de extração de dados
+cut = dbGetQuery(con, 'SELECT * FROM "postgres"."public"."bolsa_familia" LIMIT 100')
+```
+
