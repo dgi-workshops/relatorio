@@ -5,29 +5,34 @@ date: "6/28/2022"
 output: html_document
 ---
 
+```{r conexão}
+source("con/con_postgres.R")
+
+# Lista as tabelas pertecentes ao DB
+# dbListTables(con)
+
+# Extração de dados - bolsa_familia
+bolsa_familia = dbGetQuery(con, 'SELECT * FROM bolsa_familia')
+
+# Extração de dados - microdados municípios
+municipios = dbGetQuery(con, 'SELECT * FROM municipios')
+```
+
+
 # Descrição
 
 Proposta de relatório automatizado usando R, com base nos dados do **Bolsa Família**.
 
 # Conjuto de dados
 
-```{r}
+Dados realtivos a série histórica do Bolsa Família referentes aos anos de 2004 `a 2021, com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.
 
-municipios = read.csv("dados/municipios.csv")
+# Análise do Ano de 2010
 
+```{r }
+library(tidyverse)
 
-url = "http://aplicacoes.mds.gov.br/sagi/servicos/misocial?fq=tipo_s:mes_mu&wt=csv&q=*&fl=ibge:codigo_ibge,anomes:anomes_s,qtd_familias_beneficiarias_bolsa_familia,valor_repassado_bolsa_familia&rows=10000000&sort=anomes_s%20asc,%20codigo_ibge%20asc"
-
-bolsa_familia = read.csv(url)
-
+bolsa_familia_2010 = bolsa_familia %>% filter(anomes >= 201001 & anomes <= 201012)
 ```
 
-
-```{r}
-
-# exemplo de extração de dados
-bolsa_familia = dbGetQuery(con, 'SELECT * FROM bolsa_familia')
-
-municipios = dbGetQuery(con, 'SELECT * FROM municipios')
-```
 
