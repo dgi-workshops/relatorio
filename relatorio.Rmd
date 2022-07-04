@@ -25,7 +25,7 @@ Proposta de relatório automatizado usando R, com base nos dados do **Bolsa Fam�
 
 # Conjuto de dados
 
-Dados realtivos a série histórica do Bolsa Família referentes aos anos de 2004 `a 2021, com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.
+Dados relativos a série histórica do Bolsa Família referentes aos anos de 2004 `a 2021, com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.
 
 # Análise do Ano de 2010
 
@@ -33,6 +33,10 @@ Dados realtivos a série histórica do Bolsa Família referentes aos anos de 200
 library(tidyverse)
 
 bolsa_familia_2010 = bolsa_familia %>% filter(anomes >= 201001 & anomes <= 201012)
+bolsa_familia_2010 = bolsa_familia_2010 %>% group_by(ibge)
+bolsa_familia_2010 = bolsa_familia_2010 %>% summarise(total_rep = sum(valor_repassado_bolsa_familia))
+bolsa_familia_2010 = bolsa_familia_2010 %>% arrange(desc(total_rep))
+bolsa_familia_2010 = bolsa_familia_2010[1:10,]
 ```
 
 

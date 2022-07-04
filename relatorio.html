@@ -175,18 +175,36 @@ pre code {
 </div>
 
 
+<pre class="r"><code>source(&quot;con/con_postgres.R&quot;)
+
+# Lista as tabelas pertecentes ao DB
+# dbListTables(con)
+
+# Extração de dados - bolsa_familia
+bolsa_familia = dbGetQuery(con, &#39;SELECT * FROM bolsa_familia&#39;)
+
+# Extração de dados - microdados municípios
+municipios = dbGetQuery(con, &#39;SELECT * FROM municipios&#39;)</code></pre>
 <div id="descrição" class="section level1">
 <h1>Descrição</h1>
 <p>Proposta de relatório automatizado usando R, com base nos dados do <strong>Bolsa Família</strong>.</p>
 </div>
 <div id="conjuto-de-dados" class="section level1">
 <h1>Conjuto de dados</h1>
-<pre class="r"><code>municipios = read.csv(&quot;dados/municipios.csv&quot;)
-
-
-url = &quot;http://aplicacoes.mds.gov.br/sagi/servicos/misocial?fq=tipo_s:mes_mu&amp;wt=csv&amp;q=*&amp;fl=ibge:codigo_ibge,anomes:anomes_s,qtd_familias_beneficiarias_bolsa_familia,valor_repassado_bolsa_familia&amp;rows=10000000&amp;sort=anomes_s%20asc,%20codigo_ibge%20asc&quot;
-
-bolsa_familia = read.csv(url)</code></pre>
+<p>Dados realtivos a série histórica do Bolsa Família referentes aos anos de 2004 `a 2021, com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.</p>
+</div>
+<div id="análise-do-ano-de-2010" class="section level1">
+<h1>Análise do Ano de 2010</h1>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
+## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>bolsa_familia_2010 = bolsa_familia %&gt;% filter(anomes &gt;= 201001 &amp; anomes &lt;= 201012)</code></pre>
 </div>
 
 
