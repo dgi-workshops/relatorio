@@ -5,8 +5,16 @@ date: "6/28/2022"
 output: html_document
 ---
 
-```{r conexão}
-source("con/con_postgres.R")
+```{r conexão, echo=FALSE, include=FALSE}
+library(tidyverse)
+if (c('con') %in% ls() == TRUE && is.null(con) == FALSE){
+  # caso verdade para ambos
+  # fazer nada, conexão já criada!!
+} else{
+  # caso uma ou as duas condições falsas
+  # criar a conexão!!!!
+  source('con/con_postgres.R')
+}
 
 # Lista as tabelas pertecentes ao DB
 # dbListTables(con)
@@ -23,20 +31,60 @@ municipios = dbGetQuery(con, 'SELECT * FROM municipios')
 
 Proposta de relatório automatizado usando R, com base nos dados do **Bolsa Família**.
 
+```{r informaçoes_gerais, echo=FALSE, include=FALSE}
+
+anomes_inicial = min(bolsa_familia$anomes)
+
+bolsa_familia = na.omit(bolsa_familia)
+bolsa_familia2 = bolsa_familia[!is.na(bolsa_familia$valor_repassado_bolsa_familia),]
+
+anomes_final = max(bolsa_familia$anomes)
+
+```
+
+
 # Conjuto de dados
 
-Dados relativos a série histórica do Bolsa Família referentes aos anos de 2004 `a 2021, com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.
+Dados relativos a série histórica do Bolsa Família referentes aos anos de `r anomes_inicial` `r anomes_final` com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.
 
-# Análise do Ano de 2010
+# Análise do Ano de **2010**
 
-```{r }
+```{r analise_2010_por_mes, echo=FALSE, include=FALSE}
+
+bolsa_familia_2010_mes = bolsa_familia %>% separate(anomes, c('ano', 'mes'), sep =  4)
+bolsa_familia_2010_mes$ano = as.numeric(bolsa_familia_2010_mes$ano)
+bolsa_familia_2010_mes$mes = as.numeric(bolsa_familia_2010_mes$mes)
+bolsa_familia_2010_mes = bolsa_familia_2010_mes %>% filter(ano == 2010)
+bolsa_familia_2010_mes = bolsa_familia_2010_mes %>% group_by(mes)
+bolsa_familia_2010_mes = bolsa_familia_2010_mes %>% summarise(total_repasse = sum(valor_repassado_bolsa_familia, na.rm = TRUE))
+
+```
+
+
+```{r analise_2010, echo=FALSE, include=FALSE}
 library(tidyverse)
 
 bolsa_familia_2010 = bolsa_familia %>% filter(anomes >= 201001 & anomes <= 201012)
 bolsa_familia_2010 = bolsa_familia_2010 %>% group_by(ibge)
-bolsa_familia_2010 = bolsa_familia_2010 %>% summarise(total_rep = sum(valor_repassado_bolsa_familia))
-bolsa_familia_2010 = bolsa_familia_2010 %>% arrange(desc(total_rep))
-bolsa_familia_2010 = bolsa_familia_2010[1:10,]
+bolsa_familia_2010 = bolsa_familia_2010 %>% summarise(total_repasse = sum(valor_repassado_bolsa_familia),
+                                                      media_familias = mean(qtd_familias_beneficiarias_bolsa_familia))
+bolsa_familia_2010 = bolsa_familia_2010 %>% arrange(desc(total_repasse))
+
+names(bolsa_familia_2010) = c('codigo_ibge',
+                              'total_repasse',
+                              'media_familias')
+
+bolsa_familia_2010 = merge(bolsa_familia_2010, municipios, by = 'codigo_ibge')
+
+bolsa_familia_2010 = bolsa_familia_2010 %>% select(codigo_ibge, nome_municipio,
+                                                   sigla_uf, regiao,
+                                                   total_repasse, media_familias)
+
+bolsa_familia_2010 = bolsa_familia_2010 %>% arrange(desc(total_repasse))
+
 ```
 
+```{r tabela, echo=FALSE}
+knitr::kable(bolsa_familia_2010[1:10,])
+```
 

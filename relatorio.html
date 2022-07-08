@@ -175,36 +175,110 @@ pre code {
 </div>
 
 
-<pre class="r"><code>source(&quot;con/con_postgres.R&quot;)
-
-# Lista as tabelas pertecentes ao DB
-# dbListTables(con)
-
-# Extração de dados - bolsa_familia
-bolsa_familia = dbGetQuery(con, &#39;SELECT * FROM bolsa_familia&#39;)
-
-# Extração de dados - microdados municípios
-municipios = dbGetQuery(con, &#39;SELECT * FROM municipios&#39;)</code></pre>
 <div id="descrição" class="section level1">
 <h1>Descrição</h1>
 <p>Proposta de relatório automatizado usando R, com base nos dados do <strong>Bolsa Família</strong>.</p>
 </div>
 <div id="conjuto-de-dados" class="section level1">
 <h1>Conjuto de dados</h1>
-<p>Dados realtivos a série histórica do Bolsa Família referentes aos anos de 2004 `a 2021, com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.</p>
+<p>Dados relativos a série histórica do Bolsa Família referentes aos anos de 200401 202110 com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.</p>
 </div>
 <div id="análise-do-ano-de-2010" class="section level1">
-<h1>Análise do Ano de 2010</h1>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
-## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-## ✓ readr   1.4.0     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>bolsa_familia_2010 = bolsa_familia %&gt;% filter(anomes &gt;= 201001 &amp; anomes &lt;= 201012)</code></pre>
+<h1>Análise do Ano de <strong>2010</strong></h1>
+<table>
+<thead>
+<tr class="header">
+<th align="right">codigo_ibge</th>
+<th align="left">nome_municipio</th>
+<th align="left">sigla_uf</th>
+<th align="left">regiao</th>
+<th align="right">total_repasse</th>
+<th align="right">media_familias</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">230440</td>
+<td align="left">Fortaleza</td>
+<td align="left">CE</td>
+<td align="left">Nordeste</td>
+<td align="right">200137472</td>
+<td align="right">185898.42</td>
+</tr>
+<tr class="even">
+<td align="right">330455</td>
+<td align="left">Rio de Janeiro</td>
+<td align="left">RJ</td>
+<td align="left">Sudeste</td>
+<td align="right">183648939</td>
+<td align="right">168270.08</td>
+</tr>
+<tr class="odd">
+<td align="right">292740</td>
+<td align="left">Salvador</td>
+<td align="left">BA</td>
+<td align="left">Nordeste</td>
+<td align="right">182022199</td>
+<td align="right">173399.00</td>
+</tr>
+<tr class="even">
+<td align="right">261160</td>
+<td align="left">Recife</td>
+<td align="left">PE</td>
+<td align="left">Nordeste</td>
+<td align="right">144645360</td>
+<td align="right">128548.58</td>
+</tr>
+<tr class="odd">
+<td align="right">355030</td>
+<td align="left">São Paulo</td>
+<td align="left">SP</td>
+<td align="left">Sudeste</td>
+<td align="right">130772676</td>
+<td align="right">132027.33</td>
+</tr>
+<tr class="even">
+<td align="right">130260</td>
+<td align="left">Manaus</td>
+<td align="left">AM</td>
+<td align="left">Norte</td>
+<td align="right">120945595</td>
+<td align="right">99845.08</td>
+</tr>
+<tr class="odd">
+<td align="right">211130</td>
+<td align="left">São Luís</td>
+<td align="left">MA</td>
+<td align="left">Nordeste</td>
+<td align="right">92599854</td>
+<td align="right">81052.58</td>
+</tr>
+<tr class="even">
+<td align="right">150140</td>
+<td align="left">Belém</td>
+<td align="left">PA</td>
+<td align="left">Norte</td>
+<td align="right">88878253</td>
+<td align="right">75226.58</td>
+</tr>
+<tr class="odd">
+<td align="right">270430</td>
+<td align="left">Maceió</td>
+<td align="left">AL</td>
+<td align="left">Nordeste</td>
+<td align="right">87241468</td>
+<td align="right">79219.50</td>
+</tr>
+<tr class="even">
+<td align="right">530010</td>
+<td align="left">Brasília</td>
+<td align="left">DF</td>
+<td align="left">Centro-Oeste</td>
+<td align="right">74719218</td>
+<td align="right">76509.75</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
