@@ -26,6 +26,7 @@ options(scipen = 999)
 options(OutDec = ",") 
 
 # Configurando sistema para a língua portuguesa pt-BR
+
 # Sys.setlocale("LC_TIME", "pt_BR")
 # Sys.setlocale("LC_ALL","pt_BR")
 
@@ -58,23 +59,29 @@ limpaFormatacaoDinheiro <- function(x){
   
 }
 
-# Formata dinheiro com . como separador de milhares e , como decimal e bota R$
+
+# Formata dinheiro com . como separador de milhares e , como decimal
 formatarDinheiro <- function(valores){
   
-  paste0("R$ ",format((valores), nsmall=2, big.mark=".", decimal.mark=","))
+  paste0("R$",format((valores), nsmall=2, big.mark=".", decimal.mark=","))
+
   
 }
 
 
 ###### Data ######
-# Formata data para a estrutura numero_mes/ano (06/2022)
+
+# Formata data para a estrutura numero_mes/ano
+
 formatarData <- function(anomes){
   
   paste0(substr(anomes, 5,6),"/",substr(anomes,1,4))
   
 }
 
+
 # Formata data para a estrutura mês/ano (jun/2022)
+
 formatarData2 <- function(anomes, primeira_maiuscula=F){
   
   mes <- as.numeric(substr(anomes,5,6))
@@ -99,8 +106,10 @@ formatarData2 <- function(anomes, primeira_maiuscula=F){
   
 }
 
+
 # Troca o número do mês pela abrevição do mês 
 trocar_mes <- function(mes, primeira_maiuscula=F){
+  
   mes <- switch(
     mes,
     "jan",
@@ -154,6 +163,7 @@ formatarNumero2 <- function(valores){
 }
 
 # Limpa a URL do SolR
+
 trataURL <- function(url){
   url=gsub("\\s+", " ", str_trim(url))
   url=gsub("[\r\n]", "", url)
