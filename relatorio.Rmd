@@ -1,90 +1,128 @@
+
+```{r config_language, echo=FALSE, include=FALSE}
+# Configurando sistema para a Língua Portuguesa pt-BR
+Sys.setlocale("LC_TIME", "pt_BR")
+Sys.setlocale("LC_ALL","pt_BR")
+```
+
 ---
-title: "Relatório"
+title: |
+  ![](logo.png){width=25%}  
+  Protótipo de Relatório Automatizado
 author: "DGI/SAGI"
-date: "6/28/2022"
-output: html_document
+date: "`r format(Sys.Date(), '%d de %B de %Y')`"
+lang: pt_BR
+output:
+  html_document
+  pdf_document
 ---
 
-```{r conexão, echo=FALSE, include=FALSE}
-library(tidyverse)
-if (c('con') %in% ls() == TRUE && is.null(con) == FALSE){
-  # caso verdade para ambos
-  # fazer nada, conexão já criada!!
-} else{
-  # caso uma ou as duas condições falsas
-  # criar a conexão!!!!
-  source('con/con_postgres.R')
+<!-- Configuração do nosso CSS customizado --> 
+<style type="text/css">
+
+h1.title {
+  font-size: 38px;
+  color: DarkRed;
+  text-align: center;
+}
+h4.author { 
+    font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkRed;
+  text-align: center;
+}
+h4.date { 
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+  text-align: center;
+}
+body{
+  font-size: 12px;
+  font-family: "Times New Roman", Times, serif;
+  color: Black;
+  text-align: justify;
+}
+.watermark { 
+  opacity: 0.2;
+  position: fixed;
+  top: 40%;
+  left: 10%;
+  font-size: 1000%;
+  color: #00407d;
+  z-index:99;
+  /* Rotate div */
+ -ms-transform: rotate(60deg); /* IE 9 */
+ -webkit-transform: rotate(60deg); /* Chrome, Safari, Opera */
+ transform: rotate(60deg);
 }
 
-# Lista as tabelas pertecentes ao DB
-# dbListTables(con)
+</style>
 
-# Extração de dados - bolsa_familia
-bolsa_familia = dbGetQuery(con, 'SELECT * FROM bolsa_familia')
+<!-- Adicionando Marca d'agua para Rascunho -->
+<div class="watermark">RASCUNHO</div>
 
-# Extração de dados - microdados municípios
-municipios = dbGetQuery(con, 'SELECT * FROM municipios')
+
+<!-- Adicionando quebra de página para separar o cabeçalho do corpo do texto --> 
+<br>
+</br>
+
+````{r dados, echo=FALSE, include=FALSE}
+# Carregar as funções extras e pacotes necessários
+source('global.R')
 ```
 
 
-# Descrição
+<!-- Nosso projeto em si --> 
+  
+## Descrição do Projeto
 
-Proposta de relatório automatizado usando R, com base nos dados do **Bolsa Família**.
+Proposta de relatório automatizado usando a linguagem R, com base nos dados do programa [Bolsa Família](http://susagi151.mds.net/wiki/index.php?title=Programa_Bolsa_Fam%C3%ADlia_-_PBF).
 
-```{r informaçoes_gerais, echo=FALSE, include=FALSE}
+## Conjuto de dados
 
-anomes_inicial = min(bolsa_familia$anomes)
+Dados relativos a série histórica do **Bolsa Família** referentes aos anos de **`r substr(anomes_inicial, 1,4)`** à **`r substr(anomes_final, 1,4)`** com informações da quantidade de famílias atendidas e valor repassado, além disso usaremos um segundo conjunto de dados como os micro-dados dos muncípios do Brasil, a fim de enriquecer-mos a nossa análise.
 
-bolsa_familia = na.omit(bolsa_familia)
-bolsa_familia2 = bolsa_familia[!is.na(bolsa_familia$valor_repassado_bolsa_familia),]
+Para a nossa proposta de análise usaremos os seguintes cortes:
 
-anomes_final = max(bolsa_familia$anomes)
-
-```
+1. **Ano de `r substr(anomes_inicial, 1,4)`**
+2. **Ano de `r substr(anomes_final, 1,4)`**
 
 
-# Conjuto de dados
+<!-- Nosso primeiro corte --> 
 
-Dados relativos a série histórica do Bolsa Família referentes aos anos de `r anomes_inicial` `r anomes_final` com informações da quantidade de famílias atendidas e valor repassado, assim como os micro-dados dos muncípios do Brasil.
+## **1. Análise do Ano de `r info_corte1`**
 
-# Análise do Ano de **2010**
+### 1.1 Municípios por Repasse para o Ano de `r info_corte1`
 
-```{r analise_2010_por_mes, echo=FALSE, include=FALSE}
-
-bolsa_familia_2010_mes = bolsa_familia %>% separate(anomes, c('ano', 'mes'), sep =  4)
-bolsa_familia_2010_mes$ano = as.numeric(bolsa_familia_2010_mes$ano)
-bolsa_familia_2010_mes$mes = as.numeric(bolsa_familia_2010_mes$mes)
-bolsa_familia_2010_mes = bolsa_familia_2010_mes %>% filter(ano == 2010)
-bolsa_familia_2010_mes = bolsa_familia_2010_mes %>% group_by(mes)
-bolsa_familia_2010_mes = bolsa_familia_2010_mes %>% summarise(total_repasse = sum(valor_repassado_bolsa_familia, na.rm = TRUE))
-
-```
-
+Na tabela abaixo apresentamos os 10 (dez) principais Municípios para a essa categoria.
 
 ```{r analise_2010, echo=FALSE, include=FALSE}
-library(tidyverse)
-
-bolsa_familia_2010 = bolsa_familia %>% filter(anomes >= 201001 & anomes <= 201012)
-bolsa_familia_2010 = bolsa_familia_2010 %>% group_by(ibge)
-bolsa_familia_2010 = bolsa_familia_2010 %>% summarise(total_repasse = sum(valor_repassado_bolsa_familia),
-                                                      media_familias = mean(qtd_familias_beneficiarias_bolsa_familia))
-bolsa_familia_2010 = bolsa_familia_2010 %>% arrange(desc(total_repasse))
-
-names(bolsa_familia_2010) = c('codigo_ibge',
-                              'total_repasse',
-                              'media_familias')
-
-bolsa_familia_2010 = merge(bolsa_familia_2010, municipios, by = 'codigo_ibge')
-
-bolsa_familia_2010 = bolsa_familia_2010 %>% select(codigo_ibge, nome_municipio,
-                                                   sigla_uf, regiao,
-                                                   total_repasse, media_familias)
-
-bolsa_familia_2010 = bolsa_familia_2010 %>% arrange(desc(total_repasse))
-
+# carrega o arquivo com a nossa análise do primeiro corte
+source('corte1.R')
 ```
 
 ```{r tabela, echo=FALSE}
-knitr::kable(bolsa_familia_2010[1:10,])
+# cria a nossa tabela do primeiro corte
+knitr::kable(bolsa_familia_2010[1:10,], 'html') %>%
+  kable_styling(bootstrap_options = 'striped',
+                full_width = TRUE,
+                protect_latex = TRUE,
+                position = 'center',
+                #htmltable_class = 'lightable-striped'
+                )
 ```
 
+### 1.2. Análise Gráfica do Ano de `r info_corte1`
+
+Segue abaixo a série histórica dos dados
+```{r grafico1_2010, echo=FALSE}
+
+```
+
+Agora analizando por regiões
+```{r grafico2_2010, echo=FALSE}
+
+```
+
+## **2. Análise do Ano de `r info_corte2`**
