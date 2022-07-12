@@ -3,7 +3,6 @@
 ##### Pacotes #####
 
 # Carregar e instalar Pacotes Necessários (cran)
-tinytex::install_tinytex()
 packages = c("ggplot2", #pacote para gráfico 
              "readr", #pacote para carregar arquivo csv
              "tidyverse", #

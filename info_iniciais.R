@@ -1,5 +1,7 @@
 #### Informações Gerais e Iniciais ####
 
+Sys.setlocale('LC_TIME', 'pt_BR')
+Sys.setlocale('LC_ALL','pt_BR')
 # Limpando nossa entradas nulas (NA, NAN e NULLS)
 bolsa_familia = na.omit(bolsa_familia)
 

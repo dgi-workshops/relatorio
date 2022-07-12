@@ -1,65 +1,20 @@
-
-```{r config_language, echo=FALSE, include=FALSE}
-# Configurando sistema para a Língua Portuguesa pt-BR
-Sys.setlocale("LC_TIME", "pt_BR")
-Sys.setlocale("LC_ALL","pt_BR")
-```
-
 ---
 title: |
   ![](logo.png){width=25%}  
   Protótipo de Relatório Automatizado
 author: "DGI/SAGI"
-date: "`r format(Sys.Date(), '%d de %B de %Y')`"
-lang: pt_BR
+date: "`r Sys.setlocale('LC_TIME', 'pt_BR'); Sys.setlocale('LC_ALL','pt_BR'); format(Sys.Date(), '%d de %B de %Y')`"
 output:
-  html_document
-  pdf_document
+  html_document:
+    theme:
+      version: 4
+    css: "style.css"
+link-citations: yes
+always_allow_html: true
 ---
 
-<!-- Configuração do nosso CSS customizado --> 
-<style type="text/css">
 
-h1.title {
-  font-size: 38px;
-  color: DarkRed;
-  text-align: center;
-}
-h4.author { 
-    font-size: 18px;
-  font-family: "Times New Roman", Times, serif;
-  color: DarkRed;
-  text-align: center;
-}
-h4.date { 
-  font-size: 18px;
-  font-family: "Times New Roman", Times, serif;
-  color: DarkBlue;
-  text-align: center;
-}
-body{
-  font-size: 12px;
-  font-family: "Times New Roman", Times, serif;
-  color: Black;
-  text-align: justify;
-}
-.watermark { 
-  opacity: 0.2;
-  position: fixed;
-  top: 40%;
-  left: 10%;
-  font-size: 1000%;
-  color: #00407d;
-  z-index:99;
-  /* Rotate div */
- -ms-transform: rotate(60deg); /* IE 9 */
- -webkit-transform: rotate(60deg); /* Chrome, Safari, Opera */
- transform: rotate(60deg);
-}
-
-</style>
-
-<!-- Adicionando Marca d'agua para Rascunho -->
+<!-- Adicionando Marca d'agua para Rascunho (opcional)-->
 <div class="watermark">RASCUNHO</div>
 
 
@@ -70,16 +25,24 @@ body{
 ````{r dados, echo=FALSE, include=FALSE}
 # Carregar as funções extras e pacotes necessários
 source('global.R')
+
+# Configura as imagens criadas para terem resolução alta
+knitr::opts_chunk$get("fig.retina")
 ```
 
 
 <!-- Nosso projeto em si --> 
+
+```{r info_iniciais, echo=FALSE, include=FALSE}
+# carrega o dados iniciais para a construção inicial do documento
+source('info_iniciais.R')
+```
   
-## Descrição do Projeto
+## **Descrição do Projeto**
 
 Proposta de relatório automatizado usando a linguagem R, com base nos dados do programa [Bolsa Família](http://susagi151.mds.net/wiki/index.php?title=Programa_Bolsa_Fam%C3%ADlia_-_PBF).
 
-## Conjuto de dados
+## **Conjuto de dados**
 
 Dados relativos a série histórica do **Bolsa Família** referentes aos anos de **`r substr(anomes_inicial, 1,4)`** à **`r substr(anomes_final, 1,4)`** com informações da quantidade de famílias atendidas e valor repassado, além disso usaremos um segundo conjunto de dados como os micro-dados dos muncípios do Brasil, a fim de enriquecer-mos a nossa análise.
 
@@ -93,9 +56,9 @@ Para a nossa proposta de análise usaremos os seguintes cortes:
 
 ## **1. Análise do Ano de `r info_corte1`**
 
-### 1.1 Municípios por Repasse para o Ano de `r info_corte1`
+### 1.1. Municípios por Repasse para o Ano de `r info_corte1`
 
-Na tabela abaixo apresentamos os 10 (dez) principais Municípios para a essa categoria.
+Na tabela abaixo apresentamos os 10 (dez) principais Municípios para essa categoria.
 
 ```{r analise_2010, echo=FALSE, include=FALSE}
 # carrega o arquivo com a nossa análise do primeiro corte
@@ -104,8 +67,16 @@ source('corte1.R')
 
 ```{r tabela, echo=FALSE}
 # cria a nossa tabela do primeiro corte
-knitr::kable(bolsa_familia_2010[1:10,], 'html') %>%
-  kable_styling(bootstrap_options = 'striped',
+knitr::kable(bolsa_familia_2010[1:10,],
+             'html',
+             align = 'ccccrr',
+             col.names = c('Código Ibge',
+                              'Nome do Município',
+                              'UF',
+                              'Região',
+                              'Total do Repasse',
+                              'Média de Famílias')) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
                 full_width = TRUE,
                 protect_latex = TRUE,
                 position = 'center',
@@ -115,14 +86,56 @@ knitr::kable(bolsa_familia_2010[1:10,], 'html') %>%
 
 ### 1.2. Análise Gráfica do Ano de `r info_corte1`
 
-Segue abaixo a série histórica dos dados
-```{r grafico1_2010, echo=FALSE}
+Segue abaixo a série histórica dos dados para o referido intervalo de tempo.
 
+```{r grafico1_2010_mes, echo=FALSE, fig.align='center'}
+bolsa_familia_2010_mes %>%
+  ggplot(aes(x = mes, y = total_repasse/10^6)) +
+  geom_line(colour = 'purple') +
+  geom_point(colour = 'blue') +
+  ggtitle(paste0("Série Histórica do Ano de ", info_corte1))+
+  scale_x_continuous(labels = map(bolsa_familia_2010_mes$mes, trocar_mes, primeira_maiuscula=T),
+                   breaks = bolsa_familia_2010_mes$mes)+
+  ylim(min(bolsa_familia_2010_mes$total_repasse)/10^6,
+       (max(bolsa_familia_2010_mes$total_repasse)/10^6)*1.001)+
+  labs(y = "Total do Repasse em Milhões (R$)") +
+  theme(panel.background = element_blank(),
+        axis.text.x=element_text(angle = -45),
+        axis.title.x=element_blank(),
+        #axis.text.x=element_blank(),
+        #axis.ticks.x=element_blank(),
+        plot.title = element_text(hjust = 0.4))
 ```
 
 Agora analizando por regiões
-```{r grafico2_2010, echo=FALSE}
-
+```{r grafico2_2010_regiao_repasse, echo=FALSE, fig.align='center' }
+bolsa_familia_2010_regiao %>%
+  ggplot(aes(x = as.factor(regiao), y = total_repasse/10^6, fill=as.factor(regiao))) +
+  geom_bar(position="dodge", stat="identity") +
+  ggtitle(paste0("Total do repasse por região no ano de ", info_corte1))+
+  scale_fill_discrete(name = "Região") +
+  labs(y = "Total do Repasse em Milhões (R$)") +
+  theme(panel.background = element_blank(),
+        #axis.text.x=element_text(angle = -45),
+        axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        plot.title = element_text(hjust = 0.4))
 ```
+
+```{r grafico2_2010_regiao_familias, echo=FALSE, fig.align='center' }
+bolsa_familia_2010_regiao %>%
+  ggplot(aes(x = as.factor(regiao), y = media_familias, fill=as.factor(regiao))) +
+  geom_bar(position="dodge", stat="identity") +
+  ggtitle(paste0("Média de Famílias Atendida por Município e Região no Ano de ", info_corte1))+
+  scale_fill_discrete(name = "Região") +
+  labs(y = "Média de Famílias por Município") +
+  theme(panel.background = element_blank(),
+        axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        plot.title = element_text(hjust = 0.4))
+```
+
 
 ## **2. Análise do Ano de `r info_corte2`**
