@@ -170,3 +170,21 @@ trataURL <- function(url){
   url=gsub(" ", "%20", url)
   url
 }
+
+##### Paleta de cores #####
+
+# Paletas de cores em formato RGB (Padrão Serpro) 
+# Cores Gradiente 1 - azul/lilás
+cores_grad_1 = c('87,145,237', '98,142,244', '130,137,255', '150,126,251' ,'173,121,233', '216,91,239')
+# Cores Gradiente 2 - azul/verde
+cores_grad_2 = c('36,145,255', '40,160,203', '0,156,193', '54,161,145' ,'0,168,113', '0,169,28')
+# Cores Gráfico pizza
+cores_pizza = c('36,145,255', '253,68,150', '230,111,14', '0,168,113', '179,140,0')
+
+# Função que converte um vetor RGB para REX
+rgb_to_hex = function(vector){
+  
+  return(sapply(strsplit(vector, ","), function(x)
+    rgb(x[1], x[2], x[3], maxColorValue=255)))
+  
+}
