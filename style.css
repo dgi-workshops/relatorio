@@ -39,3 +39,14 @@ body{
  transform: rotate(60deg);
 }
 
+.book-date {
+    page-break-after: always;
+}
+
+.post-content {
+    page-break-before: always;
+}
+
+p {
+  page-break-inside: avoid;
+}
