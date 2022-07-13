@@ -2,23 +2,23 @@ h1.title {
   font-size: 38px;
   font-family: "Times New Roman", Times, serif;
   color: DarkRed;
+  font-weight: bold;
   text-align: center;
 }
 h4.author { 
     font-size: 18px;
   font-family: "Times New Roman", Times, serif;
   color: DarkRed;
+  font-weight: bold;
   text-align: center;
 }
 h4.date { 
   font-size: 18px;
   font-family: "Times New Roman", Times, serif;
   color: DarkBlue;
+  font-weight: bold;
   text-align: center;
 }
-hr {
-  page-break-after: always;
-    }
 body{
   font-size: 14px;
   font-family: "Times New Roman", Times, serif;
@@ -50,3 +50,7 @@ body{
 p {
   page-break-inside: avoid;
 }
+
+hr {
+  page-break-after: always;
+    }
