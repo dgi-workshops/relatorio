@@ -4,11 +4,19 @@ title: |
   Protótipo de Relatório Automatizado
 author: "DGI/SAGI"
 date: "`r Sys.setlocale('LC_TIME', 'pt_BR'); Sys.setlocale('LC_ALL','pt_BR'); format(Sys.Date(), '%d de %B de %Y')`"
+documentclass: article
 output:
   html_document:
     theme:
       version: 4
+    highlight: tango
     css: "style.css"
+  # pdf_document:
+  #   latex_engine: lualatex
+  #   df_print: kable
+  #   highlight: tango
+  #   toc: true
+  #   toc_depth: 2 
 link-citations: yes
 always_allow_html: true
 ---
@@ -68,7 +76,7 @@ source('corte1.R')
 ```{r tabela, echo=FALSE}
 # cria a nossa tabela do primeiro corte
 knitr::kable(bolsa_familia_2010[1:10,],
-             'html',
+             'latex',
              align = 'ccccrr',
              col.names = c('Código Ibge',
                               'Nome do Município',
@@ -110,11 +118,12 @@ bolsa_familia_2010_mes %>%
 Agora analizando por regiões
 ```{r grafico2_2010_regiao_repasse, echo=FALSE, fig.align='center' }
 bolsa_familia_2010_regiao %>%
-  ggplot(aes(x = as.factor(regiao), y = total_repasse/10^6, fill=as.factor(regiao))) +
+  ggplot(aes(x = as.factor(regiao), y = total_repasse/10^6,
+             fill=as.factor(regiao))) +
   geom_bar(position="dodge", stat="identity") +
   ggtitle(paste0("Total do repasse por região no ano de ", info_corte1))+
-  scale_fill_discrete(name = "Região") +
   labs(y = "Total do Repasse em Milhões (R$)") +
+  scale_fill_manual(name = "Região", values = rgb_to_hex(cores_pizza)) +
   theme(panel.background = element_blank(),
         #axis.text.x=element_text(angle = -45),
         axis.title.x=element_blank(),
@@ -125,11 +134,12 @@ bolsa_familia_2010_regiao %>%
 
 ```{r grafico2_2010_regiao_familias, echo=FALSE, fig.align='center' }
 bolsa_familia_2010_regiao %>%
-  ggplot(aes(x = as.factor(regiao), y = media_familias, fill=as.factor(regiao))) +
+  ggplot(aes(x = as.factor(regiao), y = media_familias,
+             fill=as.factor(regiao))) +
   geom_bar(position="dodge", stat="identity") +
   ggtitle(paste0("Média de Famílias Atendida por Município e Região no Ano de ", info_corte1))+
-  scale_fill_discrete(name = "Região") +
   labs(y = "Média de Famílias por Município") +
+  scale_fill_manual(name = "Região", values = rgb_to_hex(cores_pizza)) +
   theme(panel.background = element_blank(),
         axis.title.x=element_blank(),
         axis.text.x=element_blank(),
