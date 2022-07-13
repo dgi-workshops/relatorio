@@ -1,16 +1,18 @@
 #### Informações Gerais e Iniciais ####
 
+# Configurando o nosso R para a Língua Portuguesa
 Sys.setlocale('LC_TIME', 'pt_BR')
 Sys.setlocale('LC_ALL','pt_BR')
+
 # Limpando nossa entradas nulas (NA, NAN e NULLS)
 bolsa_familia = na.omit(bolsa_familia)
 
 bolsa_familia = bolsa_familia[!is.na(bolsa_familia$valor_repassado_bolsa_familia),]
 
-#início do programa
+# Início do programa
 anomes_inicial = min(bolsa_familia$anomes)
 
-#final do programa
+# Final do programa
 anomes_final = max(bolsa_familia$anomes)
 
 # Definindo nossos cortes
