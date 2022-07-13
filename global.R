@@ -63,7 +63,7 @@ limpaFormatacaoDinheiro <- function(x){
 # Formata dinheiro com . como separador de milhares e , como decimal
 formatarDinheiro <- function(valores){
   
-  paste0("R$",format((valores), nsmall=2, big.mark=".", decimal.mark=","))
+  paste0("R$ ",format((valores), nsmall=2, big.mark=".", decimal.mark=","))
 
   
 }
