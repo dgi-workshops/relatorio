@@ -1,5 +1,6 @@
 #### Conexão com o Postgres ####
 
+
 con = dbConnect(odbc::odbc(),
                  Server   = "10.68.14.110",
                  Database = "postgres",
