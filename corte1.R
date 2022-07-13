@@ -1,6 +1,6 @@
 #### Corte 1 - Ano de 2010 ####
 
-# Analise 2010 por mes (dados para a série histórica) 
+##### Analise 2010 por mes (dados para a série histórica) #####
 bolsa_familia_2010_mes = bolsa_familia %>% separate(anomes, c('ano', 'mes'), sep =  4)
 
 bolsa_familia_2010_mes$ano = as.numeric(bolsa_familia_2010_mes$ano)
@@ -15,7 +15,7 @@ bolsa_familia_2010_mes = bolsa_familia_2010_mes %>% summarise(total_repasse = su
 
 #bolsa_familia_2010_mes$mes = map(bolsa_familia_2010_mes$mes, trocar_mes)
 
-# Analise 2010 por Município (dados para a estrutura por município)
+##### Analise 2010 por Município (dados para a estrutura por município) #####
 bolsa_familia_2010 = bolsa_familia %>% filter(anomes >= 201001 & anomes <= 201012)
 
 bolsa_familia_2010 = bolsa_familia_2010 %>% group_by(ibge)
@@ -47,7 +47,7 @@ names(bolsa_familia_2010) = c('Código Ibge',
                               'Média de Famílias')
 
 
-# Analise 2010 por Município (dados para a estrutura por município)
+##### Analise 2010 por Região (dados para a estrutura por região) #####
 bolsa_familia_2010_regiao = bolsa_familia %>% filter(anomes >= 201001 & anomes <= 201012)
 
 bolsa_familia_2010_regiao = bolsa_familia_2010_regiao %>% group_by(ibge)
