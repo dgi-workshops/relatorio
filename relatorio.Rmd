@@ -64,7 +64,7 @@ Para a nossa proposta de análise usaremos os seguintes cortes:
 
 ## **1. Análise do Ano de `r info_corte1`**
 
-### 1.1. Municípios por Repasse para o Ano de `r info_corte1`
+### **1.1. Municípios por Repasse para o Ano de `r info_corte1`**
 
 Na tabela abaixo apresentamos os 10 (dez) principais Municípios para essa categoria.
 
@@ -76,7 +76,7 @@ source('corte1.R')
 ```{r tabela, echo=FALSE}
 # cria a nossa tabela do primeiro corte
 knitr::kable(bolsa_familia_2010[1:10,],
-             'latex',
+             'html',
              align = 'ccccrr',
              col.names = c('Código Ibge',
                               'Nome do Município',
@@ -92,7 +92,7 @@ knitr::kable(bolsa_familia_2010[1:10,],
                 )
 ```
 
-### 1.2. Análise Gráfica do Ano de `r info_corte1`
+### **1.2. Análise Gráfica do Ano de `r info_corte1`**
 
 Segue abaixo a série histórica dos dados para o referido intervalo de tempo.
 
