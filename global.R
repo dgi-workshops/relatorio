@@ -9,7 +9,9 @@ packages = c("ggplot2", #pacote para gráfico
              "DBI", #pacote conexão com o banco
              "purrr", #
              "stringr", #
-             'kableExtra') #
+             "kableExtra",
+             "RJDBC",
+             "RPostgres") #
 
 if (length(setdiff(packages, rownames(installed.packages()))) > 0) {
   install.packages(setdiff(packages, rownames(installed.packages())))
